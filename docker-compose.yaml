@@ -8,6 +8,7 @@ services:
        - "3689:3689"
        - "3688:3688"
        - "6601:6601"
+     network_mode: host
      volumes:
        - ./forked-daapd:/config
        - /etc/localtime:/etc/localtime:ro
