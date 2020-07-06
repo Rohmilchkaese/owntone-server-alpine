@@ -1,0 +1,15 @@
+version: "3"
+services:
+#forked-daapd
+   forked-daapd:
+     image: alpine_forked-daapd
+     container_name: daapd
+     ports:
+       - "3689:3689"
+       - "3688:3688"
+       - "6601:6601"
+     volumes:
+       - ./forked-daapd:/config
+       - /etc/localtime:/etc/localtime:ro
+       - ./forked-daapd/data:/music
+     restart: unless-stopped
