@@ -1,4 +1,4 @@
-FROM alpine:3.12.0
+FROM alpine:3.15.4
 
 RUN apk --no-cache add --virtual=deps1 \
         alsa-lib-dev \
@@ -27,6 +27,7 @@ RUN apk --no-cache add --virtual=deps1 \
         openjdk8-jre-base \
         protobuf-c-dev \
         sqlite-dev \
+        flex \
  && apk add --no-cache --virtual=deps2 --repository http://nl.alpinelinux.org/alpine/edge/testing \
         libantlr3c-dev \
         mxml-dev \
@@ -55,13 +56,13 @@ RUN apk --no-cache add --virtual=deps1 \
  && echo 'exec java -cp /tmp/antlr-3.4-complete.jar org.antlr.Tool "$@"' >> /usr/local/bin/antlr3 \
  && chmod 775 /usr/local/bin/antlr3 \
  && cd /tmp \
- && git clone https://github.com/ejurgensen/forked-daapd.git \
- && cd /tmp/forked-daapd \
+ && git clone https://github.com/owntone/owntone-server.git \
+ && cd /tmp/owntone-server \
+ && git checkout tags/28.3 \
  && autoreconf -i \
  && ./configure \
 	--enable-chromecast \
         --enable-itunes \
-        --enable-lastfm \
         --enable-mpd \
         --infodir=/usr/share/info \
         --localstatedir=/var \
@@ -73,16 +74,16 @@ RUN apk --no-cache add --virtual=deps1 \
  && apk del --purge deps1 deps2 \
  && rm -rf /usr/local/bin/antlr3 /tmp/* \
  && cd /etc \
- && sed -i -e 's/\(uid.*=.*\)/uid = "root"/g' forked-daapd.conf \
- && sed -i s#"ipv6 = yes"#"ipv6 = no"#g forked-daapd.conf \
- && sed -i s#/srv/music#/music#g forked-daapd.conf \
- && sed -i s#/usr/local/var/cache/forked-daapd/songs3.db#/config/cache/songs3.db#g forked-daapd.conf \
- && sed -i s#/usr/local/var/cache/forked-daapd/cache.db#/config/cache/cache.db#g forked-daapd.conf \
- && sed -i s#/usr/local/var/log/forked-daapd.log#/dev/stdout#g forked-daapd.conf \
- && sed -i "/db_path\ =/ s/# *//" forked-daapd.conf \
- && sed -i "/cache_path\ =/ s/# *//" forked-daapd.conf
+ && sed -i -e 's/\(uid.*=.*\)/uid = "root"/g' owntone.conf \
+ && sed -i s#"ipv6 = yes"#"ipv6 = no"#g owntone.conf \
+ && sed -i s#/srv/music#/music#g owntone.conf \
+ && sed -i s#/usr/local/var/cache/owntone/songs3.db#/config/cache/songs3.db#g owntone.conf \
+ && sed -i s#/usr/local/var/cache/owntone/cache.db#/config/cache/cache.db#g owntone.conf \
+ && sed -i s#/usr/local/var/log/owntone.log#/dev/stdout#g owntone.conf \
+ && sed -i "/db_path\ =/ s/# *//" owntone.conf \
+ && sed -i "/cache_path\ =/ s/# *//" owntone.conf
 
 VOLUME /config /music
-COPY daapd.sh /start
+COPY owntone.sh /start
 RUN chmod +x /start
 ENTRYPOINT [ "/start" ]
