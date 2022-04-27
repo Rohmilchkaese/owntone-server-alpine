@@ -61,9 +61,11 @@ RUN apk --no-cache add --virtual=deps1 \
  && git checkout tags/28.3 \
  && autoreconf -i \
  && ./configure \
-	--enable-chromecast \
+#	 --enable-chromecast \
         --enable-itunes \
-        --enable-mpd \
+#        --enable-mpd \
+         --disable-mpd \
+         --disable-spotify \
         --infodir=/usr/share/info \
         --localstatedir=/var \
         --mandir=/usr/share/man \
