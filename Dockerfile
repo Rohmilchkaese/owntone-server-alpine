@@ -23,13 +23,12 @@ RUN apk --no-cache add --virtual=deps1 \
         libsodium-dev \
         libtool \
         libunistring-dev \
-	libwebsockets-dev \
+	 libwebsockets-dev \
         openjdk8-jre-base \
         protobuf-c-dev \
         sqlite-dev \
         flex \
  && apk add --no-cache --virtual=deps2 --repository http://nl.alpinelinux.org/alpine/edge/testing \
-        libantlr3c-dev \
         mxml-dev \
  && apk add --no-cache \
         avahi \
@@ -48,17 +47,14 @@ RUN apk --no-cache add --virtual=deps1 \
         sqlite-libs \
 	libwebsockets-dev \
  && apk add --no-cache --repository http://nl.alpinelinux.org/alpine/edge/testing \
-        libantlr3c \
         mxml \
+        bison \
+        flex \
         #pulseaudio-libs \
- && curl -L -o /tmp/antlr-3.4-complete.jar http://www.antlr3.org/download/antlr-3.4-complete.jar \
- && echo '#!/bin/bash' > /usr/local/bin/antlr3 \
- && echo 'exec java -cp /tmp/antlr-3.4-complete.jar org.antlr.Tool "$@"' >> /usr/local/bin/antlr3 \
- && chmod 775 /usr/local/bin/antlr3 \
  && cd /tmp \
  && git clone https://github.com/owntone/owntone-server.git \
  && cd /tmp/owntone-server \
- && git checkout tags/28.3 \
+ && git checkout tags/28.4 \
  && autoreconf -i \
  && ./configure \
 #	 --enable-chromecast \
