@@ -1,4 +1,4 @@
-FROM alpine:3.15.4
+FROM alpine:3.17.0
 
 RUN apk --no-cache add --virtual=deps1 \
         alsa-lib-dev \
@@ -46,6 +46,7 @@ RUN apk --no-cache add --virtual=deps1 \
         sqlite \
         sqlite-libs \
 	libwebsockets-dev \
+       libuuid \
  && apk add --no-cache --repository http://nl.alpinelinux.org/alpine/edge/testing \
         mxml \
         bison \
@@ -54,7 +55,7 @@ RUN apk --no-cache add --virtual=deps1 \
  && cd /tmp \
  && git clone https://github.com/owntone/owntone-server.git \
  && cd /tmp/owntone-server \
- && git checkout tags/28.4 \
+ && git checkout tags/28.5 \
  && autoreconf -i \
  && ./configure \
 #	 --enable-chromecast \
