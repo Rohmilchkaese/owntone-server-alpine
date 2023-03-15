@@ -1,4 +1,4 @@
-FROM alpine:3.17.0
+FROM alpine:3.17.2
 
 RUN apk --no-cache add --virtual=deps1 \
         alsa-lib-dev \
@@ -55,7 +55,7 @@ RUN apk --no-cache add --virtual=deps1 \
  && cd /tmp \
  && git clone https://github.com/owntone/owntone-server.git \
  && cd /tmp/owntone-server \
- && git checkout tags/28.5 \
+ && git checkout tags/28.6 \
  && autoreconf -i \
  && ./configure \
 #	 --enable-chromecast \
