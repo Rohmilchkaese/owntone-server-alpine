@@ -1,12 +1,8 @@
 #!/bin/sh
-
-rm -rf /var/run
-rm -rf /run/dbus/dbus.pid
 mkdir -p /var/run/dbus
 dbus-uuidgen --ensure
 sleep 1
 dbus-daemon --system
-
 avahi-daemon --daemonize --no-chroot
 
 mkdir -p /config/cache
