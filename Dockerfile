@@ -1,4 +1,5 @@
-FROM alpine:3.18.4
+FROM alpine:3.19.1
+ARG OWNTONE_BRANCH=28.9
 
 RUN apk --no-cache add --virtual=deps1 \
         alsa-lib-dev \
@@ -55,7 +56,7 @@ RUN apk --no-cache add --virtual=deps1 \
  && cd /tmp \
  && git clone https://github.com/owntone/owntone-server.git \
  && cd /tmp/owntone-server \
- && git checkout tags/28.8 \
+ && git checkout "tags/$OWNTONE_BRANCH" \
  && autoreconf -i \
  && ./configure \
 #	 --enable-chromecast \
