@@ -1,10 +1,12 @@
-name: Build and Publish
+name: Publish
 
-on: [workflow_dispatch]
+on:
+  push:
+    tags: ["v*"]
 
 jobs:
-  build-and-push-docker-image:
-    name: Build Docker image and push to repositories
+  build-and-push:
+    name: Build and push to Docker Hub
     runs-on: ubuntu-latest
 
     steps:
@@ -15,7 +17,6 @@ jobs:
         uses: docker/setup-qemu-action@v3
 
       - name: Set up Docker Buildx
-        id: buildx
         uses: docker/setup-buildx-action@v3
 
       - name: Login to DockerHub
@@ -25,22 +26,20 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name: Docker meta
-        id: owntone
+        id: meta
         uses: docker/metadata-action@v5
         with:
-          images: |
-            rohmilkaese/owntone
+          images: rohmilkaese/owntone
           tags: |
-            type=schedule
-            type=ref,event=branch
-            type=ref,event=pr
             type=semver,pattern={{version}}
+            type=semver,pattern={{major}}.{{minor}}
+            type=raw,value=latest
 
       - name: Build and push
         uses: docker/build-push-action@v6
         with:
           context: .
-          platforms: linux/arm/v7
-          push: ${{ github.event_name != 'pull_request' }}
-          tags: ${{ steps.owntone.outputs.tags }}
-          labels: ${{ steps.owntone.outputs.labels }}
+          platforms: linux/amd64,linux/arm64,linux/arm/v7
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
