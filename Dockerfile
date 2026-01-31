@@ -1,5 +1,5 @@
-FROM alpine:3.19.1
-ARG OWNTONE_BRANCH=28.9
+FROM alpine:3.21
+ARG OWNTONE_BRANCH=29.0
 
 RUN apk --no-cache add --virtual=deps1 \
         alsa-lib-dev \
@@ -24,12 +24,13 @@ RUN apk --no-cache add --virtual=deps1 \
         libsodium-dev \
         libtool \
         libunistring-dev \
-	 libwebsockets-dev \
+        libwebsockets-dev \
+        libxml2-dev \
         openjdk8-jre-base \
         protobuf-c-dev \
         sqlite-dev \
         flex \
- && apk add --no-cache --virtual=deps2 --repository http://nl.alpinelinux.org/alpine/edge/testing \
+        bison \
         mxml-dev \
  && apk add --no-cache \
         avahi \
@@ -43,23 +44,20 @@ RUN apk --no-cache add --virtual=deps1 \
         libplist \
         libsodium \
         libunistring \
+        libwebsockets \
+        libxml2 \
+        libuuid \
+        mxml \
         protobuf-c \
         sqlite \
         sqlite-libs \
-	libwebsockets-dev \
-       libuuid \
- && apk add --no-cache --repository http://nl.alpinelinux.org/alpine/edge/testing \
-        mxml \
-        bison \
-        flex \
-        #pulseaudio-libs \
  && cd /tmp \
  && git clone https://github.com/owntone/owntone-server.git \
  && cd /tmp/owntone-server \
  && git checkout "tags/$OWNTONE_BRANCH" \
  && autoreconf -i \
  && ./configure \
-#	 --enable-chromecast \
+#        --enable-chromecast \
         --enable-itunes \
 #        --enable-mpd \
          --disable-mpd \
@@ -71,7 +69,7 @@ RUN apk --no-cache add --virtual=deps1 \
         --sysconfdir=/etc \
  && make \
  && make install \
- && apk del --purge deps1 deps2 \
+ && apk del --purge deps1 \
  && rm -rf /usr/local/bin/antlr3 /tmp/* \
  && cd /etc \
  && sed -i -e 's/\(uid.*=.*\)/uid = "root"/g' owntone.conf \
