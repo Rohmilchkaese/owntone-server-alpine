@@ -1,5 +1,5 @@
 FROM alpine:3.21
-ARG OWNTONE_BRANCH=29.0
+ARG OWNTONE_BRANCH=29.3
 
 RUN apk --no-cache add --virtual=deps1 \
         alsa-lib-dev \
